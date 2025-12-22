@@ -59,9 +59,24 @@ long long find_invalid_ids_at_least_twice(std::string filename) {
             long long upper_bound_int {std::stoll(match[2])};
             for (long long i{lower_bound_int}; i < upper_bound_int; ++i) {
                 std::string number = std::to_string(i); 
-                for (auto j{0uz}; j < number.length(); ++j) {
-                    if () {
-                        sum += ; 
+                // using a growing window repeatedly across number
+                int midpoint{ number.length()/2 }; 
+                for (int j{1}; j <= midpoint; ++j) {
+                    if (number.length() % j != 0) {
+                        continue; 
+                    }
+                    bool valid{ true }; 
+                    for(int k{j}; k < number.length(); k+=j) {
+                        if (number.substr(0,j) == number.substr(k,j)) {
+                            continue;
+                        } else {
+                            valid = false;
+                            break;  
+                        }
+                    }
+                    if (valid) {
+                        sum += i;
+                        break;  
                     }
                 }
             }
@@ -73,4 +88,5 @@ long long find_invalid_ids_at_least_twice(std::string filename) {
 int main (int argc, char** argv) {
     std::string filename = argv[1];
     std::cout << find_invalid_ids(filename) << "\n"; 
+    std::cout << find_invalid_ids_at_least_twice(filename) << "\n"; 
 }
